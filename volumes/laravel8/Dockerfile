@@ -16,7 +16,7 @@ RUN mkdir -p $NVM_DIR \
     && nvm install $NODE_VERSION \
     && nvm alias default $NODE_VERSION \
     && nvm use default \
-	&& npm install -g yarn
+    && npm install -g yarn
 
 # Add node and npm to path
 ENV NODE_PATH $NVM_DIR/v$NODE_VERSION/lib/node_modules
