@@ -1,5 +1,3 @@
-version: "3.7"
-
 services:
 
   adminer:
@@ -25,13 +23,13 @@ services:
       - "443:443"
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock:ro
-      - ./volumes/certs:/etc/nginx/certs
+      - ./volumes/proxy/certs:/etc/nginx/certs
 
   web:
-    build: ./volumes/laravel
+    build: ./volumes/web
     volumes:
       - ./apps/web:/var/www/html
-      - ./volumes/laravel/000-default.conf:/etc/apache2/sites-available/000-default.conf
+      - ./volumes/web/000-default.conf:/etc/apache2/sites-available/000-default.conf
       - ./data/web/storage/app:/var/www/html/storage/app
       - ./data/web/storage/logs:/var/www/html/storage/logs
     depends_on:
