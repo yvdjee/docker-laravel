@@ -8,17 +8,15 @@ services:
       - VIRTUAL_HOST=db.local
       - VIRTUAL_PORT=8080
 
-  mariadb:
-    image: mariadb:10.6
-    command:
-      - --character-set-server=utf8mb4
-      - --collation-server=utf8mb4_unicode_ci
-      - --skip-character-set-client-handshake
-      - --skip-innodb-read-only-compressed
+  database:
+    image: mysql:latest
+    restart: always
     environment:
       MYSQL_ROOT_PASSWORD: 12345
+    volumes:
+      - ./data:/var/lib/mysql
     ports:
-      - "3306:3306"
+      - 3306:3306
 
   nginx-proxy:
     image: jwilder/nginx-proxy
@@ -30,14 +28,14 @@ services:
       - ./volumes/certs:/etc/nginx/certs
 
   web:
-    build: ./volumes/laravel8
+    build: ./volumes/laravel
     volumes:
       - ./apps/web:/var/www/html
-      - ./volumes/laravel8/000-default.conf:/etc/apache2/sites-available/000-default.conf
+      - ./volumes/laravel/000-default.conf:/etc/apache2/sites-available/000-default.conf
       - ./data/web/storage/app:/var/www/html/storage/app
       - ./data/web/storage/logs:/var/www/html/storage/logs
     depends_on:
-      - mariadb
+      - database
     environment:
-      - VIRTUAL_HOST=web.local
+      - VIRTUAL_HOST=laravel.local
       - VIRTUAL_PORT=80

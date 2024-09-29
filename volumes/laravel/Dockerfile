@@ -1,4 +1,4 @@
-FROM php:8.0-apache
+FROM php:8.2-apache
 
 ADD add_php.ini /usr/local/etc/php/conf.d/
 
@@ -11,7 +11,7 @@ RUN apt-get install -y autoconf pkg-config libssl-dev
 ENV NODE_VERSION=16
 ENV NVM_DIR=/usr/local/nvm
 RUN mkdir -p $NVM_DIR \
-    && curl https://raw.githubusercontent.com/creationix/nvm/v0.39.1/install.sh | bash \
+    && curl https://raw.githubusercontent.com/creationix/nvm/v0.40.1/install.sh | bash \
     && . $NVM_DIR/nvm.sh \
     && nvm install $NODE_VERSION \
     && nvm alias default $NODE_VERSION \
