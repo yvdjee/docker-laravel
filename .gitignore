@@ -1,2 +1,3 @@
 **/.DS_Store
 volumes/proxy/certs/*
+data/mysql/
