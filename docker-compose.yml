@@ -1,12 +1,14 @@
 services:
 
   adminer:
+    container_name: adminer
     image: adminer
     environment:
       - VIRTUAL_HOST=db.local
       - VIRTUAL_PORT=8080
 
   database:
+    container_name: database
     image: mysql:latest
     restart: always
     environment:
@@ -17,6 +19,7 @@ services:
       - 3306:3306
 
   nginx-proxy:
+    container_name: proxy
     image: jwilder/nginx-proxy
     ports:
       - "80:80"
@@ -26,6 +29,7 @@ services:
       - ./volumes/proxy/certs:/etc/nginx/certs
 
   web:
+    container_name: web
     build: ./volumes/web
     volumes:
       - ./apps/web:/var/www/html
