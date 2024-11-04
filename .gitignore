@@ -1,5 +1,6 @@
 **/.DS_Store
 volumes/proxy/certs/*
+volumes/proxy/configs/default.conf
 data/mysql/
 apps/
 data/
