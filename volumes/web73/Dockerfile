@@ -1,10 +1,10 @@
-FROM php:8.2-apache
+FROM php:7.3-apache
 
 ADD add_php.ini /usr/local/etc/php/conf.d/
 
 RUN apt-get update -y && apt-get install -y libzip-dev g++ libicu-dev libpq-dev zlib1g-dev libpng-dev
 RUN docker-php-ext-configure zip
-RUN docker-php-ext-install pdo pdo_mysql pdo opcache intl zip gd
+RUN docker-php-ext-install pdo pdo_mysql pdo opcache intl zip gd pcntl
 RUN apt-get install -y autoconf pkg-config libssl-dev
 
 # Install NVM and Node

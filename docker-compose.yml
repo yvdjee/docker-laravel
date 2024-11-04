@@ -1,25 +1,21 @@
 services:
 
+  redis:
+    container_name: redis
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    command: redis-server --save 20 1 --loglevel warning
+    volumes:
+      - ./data/redis/cache:/data
+
   adminer:
-    container_name: adminer
     image: adminer
     environment:
       - VIRTUAL_HOST=db.local
       - VIRTUAL_PORT=8080
 
-  database:
-    container_name: database
-    image: mysql:latest
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: 12345
-    volumes:
-      - ./data/mysql:/var/lib/mysql
-    ports:
-      - 3306:3306
-
   nginx-proxy:
-    container_name: proxy
     image: jwilder/nginx-proxy
     ports:
       - "80:80"
@@ -27,17 +23,21 @@ services:
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock:ro
       - ./volumes/proxy/certs:/etc/nginx/certs
-
-  web:
-    container_name: web
-    build: ./volumes/web
-    volumes:
-      - ./apps/web:/var/www/html
-      - ./volumes/web/000-default.conf:/etc/apache2/sites-available/000-default.conf
-      - ./data/web/storage/app:/var/www/html/storage/app
-      - ./data/web/storage/logs:/var/www/html/storage/logs
-    depends_on:
-      - database
+      - ./volumes/proxy/configs:/etc/nginx/conf.d
     environment:
-      - VIRTUAL_HOST=laravel.local
+      - DEFAULT_PROXY_TIMEOUT=300s
+      - DEFAULT_CLIENT_TIMEOUT=300s
+
+  legacyseller-dld:
+    container_name: legacyseller-dld
+    build: ./volumes/web82
+    volumes:
+      - ./apps/legacyseller-dld:/var/www/html
+      - ./volumes/web82/000-default.conf:/etc/apache2/sites-available/000-default.conf
+      - ./data/legacyseller-dld/storage/app:/var/www/html/storage/app
+      - ./data/legacyseller-dld/storage/logs:/var/www/html/storage/logs
+    environment:
+      - VIRTUAL_HOST=dld.legacyseller.local
       - VIRTUAL_PORT=80
+
+
